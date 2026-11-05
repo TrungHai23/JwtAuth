@@ -1,0 +1,9 @@
+mat-toolbar {
+  background-color: var(--mat-sys-primary);
+  color: var(--mat-sys-on-primary);
+}
+
+/* Đảm bảo icon/button lấy theo màu text tương phản */
+mat-toolbar button {
+  color: inherit;
+}

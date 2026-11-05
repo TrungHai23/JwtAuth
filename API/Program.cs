@@ -75,8 +75,9 @@ if (app.Environment.IsDevelopment())
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "JwtAuth API v1");
     });
 }
-
+app.UseRouting();
 app.UseHttpsRedirection();
+app.UseCors(policy => policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 app.UseAuthentication();
 app.UseAuthorization();
 

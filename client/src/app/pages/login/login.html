@@ -1,0 +1,82 @@
+<div class="min-h-[calc(100vh-64px)] flex items-center justify-center bg-slate-50 p-4 sm:p-6">
+  <mat-card class="max-w-md w-full p-6 sm:p-8 rounded-2xl shadow-lg bg-white border border-slate-100">
+    <!-- Header -->
+    <div class="text-center mb-6">
+      <div class="mx-auto w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-3">
+        <mat-icon class="!w-6 !h-6 !text-2xl leading-none">lock</mat-icon>
+      </div>
+      <h2 class="text-2xl font-bold tracking-tight text-slate-800">Đăng nhập</h2>
+      <p class="text-xs sm:text-sm text-slate-500 mt-1">Nhập tài khoản và mật khẩu của bạn để tiếp tục</p>
+    </div>
+
+    <!-- Form -->
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
+      <!-- Email Field -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Email</mat-label>
+        <input 
+          matInput 
+          type="email" 
+          formControlName="email" 
+          placeholder="example@gmail.com" 
+          autocomplete="email">
+        <mat-icon matPrefix class="mr-2 text-slate-400">email</mat-icon>
+        @if (loginForm.get('email')?.hasError('required')) {
+          <mat-error>Vui lòng nhập email</mat-error>
+        } @else if (loginForm.get('email')?.hasError('email')) {
+          <mat-error>Email không hợp lệ</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Password Field -->
+      <mat-form-field appearance="outline" class="w-full">
+        <mat-label>Mật khẩu</mat-label>
+        <input 
+          matInput 
+          [type]="hidePassword() ? 'password' : 'text'" 
+          formControlName="password" 
+          placeholder="••••••••" 
+          autocomplete="current-password">
+        <mat-icon matPrefix class="mr-2 text-slate-400">key</mat-icon>
+        <button 
+          mat-icon-button 
+          matSuffix 
+          type="button" 
+          (click)="togglePasswordVisibility()" 
+          [attr.aria-label]="'Hide password'" 
+          [attr.aria-pressed]="hidePassword()">
+          <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        @if (loginForm.get('password')?.hasError('required')) {
+          <mat-error>Vui lòng nhập mật khẩu</mat-error>
+        } @else if (loginForm.get('password')?.hasError('minlength')) {
+          <mat-error>Mật khẩu tối thiểu 6 ký tự</mat-error>
+        }
+      </mat-form-field>
+
+      <!-- Extra options: Forgot password -->
+      <div class="flex items-center justify-end -mt-1 mb-3">
+        <a routerLink="/forgot-password" class="text-xs font-medium text-indigo-600 hover:underline">
+          Quên mật khẩu?
+        </a>
+      </div>
+
+      <!-- Submit Button -->
+      <button 
+        mat-flat-button 
+        type="submit" 
+        [disabled]="loginForm.invalid"
+        class="!py-6 !rounded-xl !text-base !font-semibold shadow-sm transition-all duration-200">
+        Đăng nhập
+      </button>
+
+      <!-- Register Link -->
+      <p class="text-center text-xs text-slate-500 mt-4">
+        Chưa có tài khoản? 
+        <a routerLink="/register" class="text-indigo-600 font-semibold hover:underline">
+          Đăng ký ngay
+        </a>
+      </p>
+    </form>
+  </mat-card>
+</div>
