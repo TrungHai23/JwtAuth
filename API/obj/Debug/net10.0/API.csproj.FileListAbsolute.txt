@@ -158,3 +158,4 @@ D:\haifide\Chat\JwtAuth\API\obj\Debug\net10.0\refint\API.dll
 D:\haifide\Chat\JwtAuth\API\obj\Debug\net10.0\API.pdb
 D:\haifide\Chat\JwtAuth\API\obj\Debug\net10.0\API.genruntimeconfig.cache
 D:\haifide\Chat\JwtAuth\API\obj\Debug\net10.0\ref\API.dll
+D:\haifide\Chat\JwtAuth\API\obj\Debug\net10.0\API.sourcelink.json
