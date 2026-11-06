@@ -1,0 +1,102 @@
+<div class="min-h-[calc(100vh-64px)] flex items-center justify-center bg-slate-50 py-8 px-4 sm:px-6">
+    <mat-card class="max-w-lg w-full p-6 sm:p-8 rounded-2xl shadow-lg bg-white border border-slate-100">
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <div
+                class="mx-auto w-12 h-12 rounded-xl bg-indigo-50 flex items-center justify-center text-indigo-600 mb-3">
+                <mat-icon class="!w-6 !h-6 !text-2xl leading-none">person_add</mat-icon>
+            </div>
+            <h2 class="text-2xl font-bold tracking-tight text-slate-800">Tạo tài khoản mới</h2>
+            <p class="text-xs sm:text-sm text-slate-500 mt-1">Điền các thông tin bên dưới để đăng ký</p>
+        </div>
+
+        <!-- Form -->
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-2">
+            <!-- Full Name -->
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Họ và tên</mat-label>
+                <input matInput formControlName="fullName" placeholder="Nguyễn Văn A" autocomplete="name" />
+                <mat-icon matPrefix class="mr-2 text-slate-400">badge</mat-icon>
+                @if (registerForm.get('fullName')?.hasError('required')) {
+                <mat-error>Họ và tên không được để trống</mat-error>
+                } @else if (registerForm.get('fullName')?.hasError('minlength')) {
+                <mat-error>Tối thiểu 2 ký tự</mat-error>
+                }
+            </mat-form-field>
+
+            <!-- Email -->
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Email</mat-label>
+                <input matInput type="email" formControlName="email" placeholder="example@gmail.com"
+                    autocomplete="email" />
+                <mat-icon matPrefix class="mr-2 text-slate-400">email</mat-icon>
+                @if (registerForm.get('email')?.hasError('required')) {
+                <mat-error>Vui lòng nhập email</mat-error>
+                } @else if (registerForm.get('email')?.hasError('email')) {
+                <mat-error>Email không hợp lệ</mat-error>
+                }
+            </mat-form-field>
+
+            <!-- Roles (Multi-select) -->
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Vai trò (Roles)</mat-label>
+                <mat-select formControlName="roles" multiple placeholder="Chọn vai trò">
+                    @for (role of roles$ | async; track role.id) {
+                    <mat-option [value]="role.name">{{ role.name }}</mat-option>
+                    }
+                </mat-select>
+                <mat-icon matPrefix class="mr-2 text-slate-400">admin_panel_settings</mat-icon>
+                @if (registerForm.get('roles')?.hasError('required')) {
+                <mat-error>Vui lòng chọn ít nhất một vai trò</mat-error>
+                }
+            </mat-form-field>
+
+            <!-- Password -->
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Mật khẩu</mat-label>
+                <input matInput [type]="hidePassword() ? 'password' : 'text'" formControlName="password"
+                    placeholder="••••••••" autocomplete="new-password" />
+                <mat-icon matPrefix class="mr-2 text-slate-400">key</mat-icon>
+                <button mat-icon-button matSuffix type="button" (click)="hidePassword.set(!hidePassword())">
+                    <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                @if (registerForm.get('password')?.hasError('required')) {
+                <mat-error>Vui lòng nhập mật khẩu</mat-error>
+                } @else if (registerForm.get('password')?.hasError('minlength')) {
+                <mat-error>Mật khẩu tối thiểu 6 ký tự</mat-error>
+                }
+            </mat-form-field>
+
+            <!-- Confirm Password -->
+            <mat-form-field appearance="outline" class="w-full">
+                <mat-label>Xác nhận mật khẩu</mat-label>
+                <input matInput [type]="hideConfirmPassword() ? 'password' : 'text'" formControlName="confirmPassword"
+                    placeholder="••••••••" autocomplete="new-password" />
+                <mat-icon matPrefix class="mr-2 text-slate-400">lock_reset</mat-icon>
+                <button mat-icon-button matSuffix type="button"
+                    (click)="hideConfirmPassword.set(!hideConfirmPassword())">
+                    <mat-icon>{{ hideConfirmPassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+                </button>
+                @if (registerForm.get('confirmPassword')?.hasError('required')) {
+                <mat-error>Vui lòng xác nhận mật khẩu</mat-error>
+                } @else if (registerForm.get('confirmPassword')?.hasError('passwordMismatch')) {
+                <mat-error>Mật khẩu xác nhận không khớp</mat-error>
+                }
+            </mat-form-field>
+
+            <!-- Submit Button -->
+            <button mat-flat-button type="submit" [disabled]="registerForm.invalid"
+                class="!py-6 !rounded-xl !text-base !font-semibold shadow-sm transition-all duration-200 mt-2">
+                Đăng ký tài khoản
+            </button>
+
+            <!-- Link sang login -->
+            <p class="text-center text-xs text-slate-500 mt-4">
+                Đã có tài khoản?
+                <a routerLink="/login" class="text-indigo-600 font-semibold hover:underline">
+                    Đăng nhập
+                </a>
+            </p>
+        </form>
+    </mat-card>
+</div>
