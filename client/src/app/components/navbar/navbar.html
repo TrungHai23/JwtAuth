@@ -39,7 +39,7 @@
 
         <div class="py-1">
           <!-- Item: Trang cá nhân -->
-          <button mat-menu-item routerLink="/profile" class="!flex !items-center !gap-3 text-slate-700 hover:text-indigo-600">
+          <button mat-menu-item [routerLink]="['account',currentUser.id]" class="!flex !items-center !gap-3 text-slate-700 hover:text-indigo-600">
             <mat-icon class="text-slate-400">person_outline</mat-icon>
             <span class="text-sm font-medium">Hồ sơ cá nhân</span>
           </button>
