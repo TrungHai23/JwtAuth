@@ -1,4 +1,4 @@
-import { Injectable, Service } from '@angular/core';
+import { Injectable, Service, signal } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { LoginRequest } from '../interfaces/login-request';
 import { AuthResponse } from '../interfaces/auth-response';
@@ -14,6 +14,8 @@ import { UserDetail } from '../interfaces/user-detail';
 export class Auth {
     apiUrl: string = environment.apiUrl;
     private tokenKey: string = 'token';
+    // Signal giữ token, khởi tạo từ localStorage
+    private token = signal<string | null>(localStorage.getItem(this.tokenKey));
 
     constructor(private http: HttpClient) { }
 
@@ -22,13 +24,14 @@ export class Auth {
             map((response: AuthResponse) => {
                 if (response.isSuccess) {
                     localStorage.setItem(this.tokenKey, response.token);
+                    this.token.set(response.token);
                 }
                 return response;
             })
         );
     }
 
-     register(data: RegisterRequest): Observable<AuthResponse> {
+    register(data: RegisterRequest): Observable<AuthResponse> {
         return this.http.post<AuthResponse>(`${this.apiUrl}account/register`, data);
     }
 
@@ -49,6 +52,8 @@ export class Auth {
         return userDetails;
     }
 
+    getUserAll = (): Observable<UserDetail[]> => this.http.get<UserDetail[]>(`${this.apiUrl}account`)
+
     isLoggedIn = (): boolean => {
         const token = this.getToken();
         if (!token) {
@@ -57,13 +62,21 @@ export class Auth {
         return !this.isTokenExpired();
     };
 
+    getRoles = (): string[] | null => {
+        const token = this.getToken();
+        if(!token) return null;
+
+        const decodedToken: any = jwtDecode(token);
+        return decodedToken.role || null
+    }
+
     private isTokenExpired(): boolean {
         const token = this.getToken();
         if (!token) {
             return true;
         }
         const decodedToken = jwtDecode(token);
-        const isTokenExpired = Date.now() >=decodedToken.exp! * 1000;
+        const isTokenExpired = Date.now() >= decodedToken.exp! * 1000;
         if (isTokenExpired) {
             this.logout();
         }
@@ -72,7 +85,8 @@ export class Auth {
 
     logout = (): void => {
         localStorage.removeItem(this.tokenKey);
+        this.token.set(null);
     }
 
-    getToken = (): string | null => localStorage.getItem(this.tokenKey) || "";
+    getToken = (): string | null => this.token();
 }
