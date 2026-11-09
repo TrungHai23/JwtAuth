@@ -1,1 +1,119 @@
-<p>account works!</p>
+<div *ngIf="accountDetail$ | async as user" class="min-h-[calc(100vh-64px)] bg-slate-50 py-10 px-4 sm:px-6 flex justify-center items-start">
+  <mat-card class="max-w-2xl w-full p-6 sm:p-8 rounded-3xl shadow-lg bg-white border border-slate-100">
+    
+    <!-- Header: Avatar & Info cơ bản -->
+    <div  class="flex flex-col sm:flex-row items-center sm:items-start gap-5 pb-6 border-b border-slate-100">
+      <div class="w-20 h-20 rounded-2xl bg-indigo-600 text-white flex items-center justify-center font-bold text-3xl shadow-md select-none">
+        {{ user.fullName.charAt(0).toUpperCase() }}
+      </div>
+      
+      <div class="text-center sm:text-left flex-1">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <h1 class="text-2xl font-bold text-slate-800">{{ user.fullName }}</h1>
+          <span class="text-xs font-mono text-slate-400 bg-slate-100 px-2 py-1 rounded-md self-center sm:self-start">
+            ID: {{ user.id | slice:0:8 }}...
+          </span>
+        </div>
+        <p class="text-slate-500 text-sm mt-1 flex items-center justify-center sm:justify-start gap-1">
+          <mat-icon class="!w-4 !h-4 !text-base leading-none text-slate-400">email</mat-icon>
+          {{ user.email }}
+        </p>
+
+        <!-- Roles Chips -->
+        <div class="flex flex-wrap gap-1.5 mt-3 justify-center sm:justify-start">
+          @for (role of user.roles; track role) {
+            <span class="px-2.5 py-0.5 text-xs font-medium bg-indigo-50 text-indigo-700 rounded-full border border-indigo-100">
+              {{ role }}
+            </span>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Body: Chi tiết các thuộc tính Identity -->
+    <div class="py-6 space-y-4">
+      <h2 class="text-sm font-semibold tracking-wider uppercase text-slate-400 mb-3">
+        Chi tiết tài khoản & Bảo mật
+      </h2>
+
+      <!-- Phone Number -->
+      <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50/80 hover:bg-slate-50 transition-colors">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-slate-600 shadow-sm">
+            <mat-icon class="!text-xl !w-5 !h-5">phone</mat-icon>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400 font-medium">Số điện thoại</p>
+            <p class="text-sm font-semibold text-slate-700">{{ user.phoneNumber || 'Chưa cập nhật' }}</p>
+          </div>
+        </div>
+
+        @if (user.phoneNumberConfirmed) {
+          <span class="flex items-center gap-1 text-xs font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+            <mat-icon class="!w-4 !h-4 !text-base leading-none">verified</mat-icon>
+            Đã xác minh
+          </span>
+        } @else {
+          <span class="flex items-center gap-1 text-xs font-medium text-amber-600 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-100">
+            <mat-icon class="!w-4 !h-4 !text-base leading-none">warning</mat-icon>
+            Chưa xác minh
+          </span>
+        }
+      </div>
+
+      <!-- Two-Factor Authentication -->
+      <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50/80 hover:bg-slate-50 transition-colors">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-slate-600 shadow-sm">
+            <mat-icon class="!text-xl !w-5 !h-5">security</mat-icon>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400 font-medium">Xác thực 2 bước (2FA)</p>
+            <p class="text-sm font-semibold text-slate-700">
+              {{ user.twoFactorEnabled ? 'Đang kích hoạt' : 'Đã tắt' }}
+            </p>
+          </div>
+        </div>
+
+        @if (user.twoFactorEnabled) {
+          <span class="text-xs font-medium text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
+            Bật
+          </span>
+        } @else {
+          <span class="text-xs font-medium text-slate-500 bg-slate-100 px-2.5 py-1 rounded-full">
+            Tắt
+          </span>
+        }
+      </div>
+
+      <!-- Access Failed Count -->
+      <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-50/80 hover:bg-slate-50 transition-colors">
+        <div class="flex items-center gap-3">
+          <div class="w-9 h-9 rounded-lg bg-white flex items-center justify-center text-slate-600 shadow-sm">
+            <mat-icon class="!text-xl !w-5 !h-5">lock_clock</mat-icon>
+          </div>
+          <div>
+            <p class="text-xs text-slate-400 font-medium">Số lần đăng nhập sai</p>
+            <p class="text-sm font-semibold text-slate-700">{{ user.accessFailedCount }} lần</p>
+          </div>
+        </div>
+
+        <span class="text-xs font-mono text-slate-400 bg-white px-2.5 py-1 rounded-lg border border-slate-200">
+          Max: 5
+        </span>
+      </div>
+    </div>
+
+    <!-- Actions Footer -->
+    <div class="pt-4 border-t border-slate-100 flex justify-end gap-3">
+      <button mat-stroked-button class="!rounded-xl !py-5">
+        <mat-icon class="mr-1">edit</mat-icon>
+        Chỉnh sửa
+      </button>
+      <button mat-flat-button class="!rounded-xl !py-5">
+        <mat-icon class="mr-1">password</mat-icon>
+        Đổi mật khẩu
+      </button>
+    </div>
+  </mat-card>
+</div>
