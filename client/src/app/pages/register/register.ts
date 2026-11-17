@@ -8,7 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { Router, RouterLink } from '@angular/router';
 import { Auth } from '../../services/auth';
-import { Role } from '../../services/role';
+import { RoleService } from '../../services/role';
 import { RoleInterface  } from '../../interfaces/role';
 import { Observable } from 'rxjs/internal/Observable';
 import { AsyncPipe } from '@angular/common';
@@ -59,7 +59,7 @@ export class Register {
   matSnackBar = inject(MatSnackBar);
   private authService = inject(Auth);
   private router = inject(Router);
-  roleService = inject(Role);
+  roleService = inject(RoleService);
   role$!: Observable<RoleInterface[]>; // Observable chứa danh sách vai trò
   error! : ValidationError[]; // Biến để lưu lỗi từ API
 

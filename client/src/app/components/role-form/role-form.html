@@ -1,0 +1,40 @@
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
+  <h2 class="text-lg font-semibold text-slate-800 mb-1">Thêm vai trò mới</h2>
+  <p class="text-xs text-slate-500 mb-5">Nhập tên quyền hạn để phân quyền cho người dùng trong hệ thống.</p>
+
+  <form (ngSubmit)="add()" class="flex flex-col gap-3">
+    <mat-form-field appearance="outline" class="w-full">
+      <mat-label>Tên vai trò (Role name)</mat-label>
+      <input 
+        type="text" 
+        matInput 
+        name="name" 
+        [(ngModel)]="role.roleName" 
+        placeholder="Ví dụ: Admin, Manager, User..." 
+        required>
+      <mat-icon matPrefix class="text-slate-400 mr-2">admin_panel_settings</mat-icon>
+      
+      @if (!role.roleName) {
+        <mat-error class="text-xs">
+          Tên vai trò không được để trống
+        </mat-error>
+      }
+    </mat-form-field>
+
+    @if (errorMessage) {
+      <div class="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm">
+        <mat-icon class="!text-base !w-4 !h-4">error_outline</mat-icon>
+        <span>{{ errorMessage }}</span>
+      </div>
+    }
+
+    <button 
+      mat-flat-button 
+      [disabled]="!role.roleName" 
+      type="submit"
+      class="!w-full !py-5 !mt-1 !rounded-xl !font-semibold !bg-indigo-600 !text-white disabled:!bg-slate-200 disabled:!text-slate-400 hover:!bg-indigo-700 transition-colors">
+      <mat-icon class="mr-1">add_circle_outline</mat-icon>
+      Tạo vai trò
+    </button>
+  </form>
+</div>

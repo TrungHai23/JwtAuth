@@ -6,6 +6,7 @@ import { Account } from './pages/account/account';
 import { authGuard } from './guards/auth-guard';
 import { Users } from './pages/users/users';
 import { roleGuard } from './guards/role-guard';
+import { Role } from './pages/role/role';
 
 export const routes: Routes = [
     {
@@ -29,6 +30,15 @@ export const routes: Routes = [
     {
         path: 'users',
         component: Users,
+        canActivate: [roleGuard],
+        data:{
+            roles: ['Admin']
+        },
+        
+    },
+    {
+        path: 'roles',
+        component: Role,
         canActivate: [roleGuard],
         data:{
             roles: ['Admin']

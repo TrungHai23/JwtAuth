@@ -1,0 +1,70 @@
+<div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+  <!-- Header của Card -->
+  <div class="px-6 py-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
+    <div>
+      <h2 class="text-lg font-semibold text-slate-800">Danh sách vai trò</h2>
+      <p class="text-xs text-slate-500">Các quyền hiện đang có trong hệ thống</p>
+    </div>
+    <span class="px-3 py-1 text-xs font-bold rounded-full bg-indigo-100 text-indigo-700">
+    {{ roles?.length ?? 0 }} vai trò
+    </span>
+  </div>
+
+  <!-- Bảng danh sách -->
+  <div class="overflow-x-auto">
+    <table class="w-full text-left border-collapse">
+      <thead>
+        <tr class="border-b border-slate-100 text-xs uppercase text-slate-500 font-semibold bg-slate-50/50">
+          <th class="py-3 px-6">Tên vai trò</th>
+          <th class="py-3 px-4 text-center">Người dùng</th>
+          <th class="py-3 px-6 text-right">Thao tác</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100 text-sm">
+        @for (role of roles; track role.id) {
+          <tr class="hover:bg-slate-50/80 transition-colors group">
+            <!-- Tên Role -->
+            <td class="py-3.5 px-6">
+              <div class="flex items-center gap-2.5">
+                <div class="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                  <mat-icon class="!text-lg !w-5 !h-5">shield</mat-icon>
+                </div>
+                <span class="font-semibold text-slate-800">{{ role.name }}</span>
+              </div>
+            </td>
+
+            <!-- Số lượng User (nếu API có trả về totalUsers) -->
+            <td class="py-3.5 px-4 text-center">
+              <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600">
+                <mat-icon class="!text-sm !w-4 !h-4 text-slate-400">group</mat-icon>
+                {{ role.totalUsers ?? 0 }}
+              </span>
+            </td>
+
+            <!-- Nút Xóa -->
+            <td class="py-3.5 px-6 text-right">
+              <button 
+                mat-icon-button 
+                (click)="delete(role.id)"
+                matTooltip="Xóa vai trò này"
+                class="!text-slate-400 hover:!text-red-600 hover:!bg-red-50 transition-colors">
+                <mat-icon class="!text-xl">delete_outline</mat-icon>
+              </button>
+            </td>
+          </tr>
+        } @empty {
+          <!-- Trạng thái trống -->
+          <tr>
+            <td colspan="3" class="py-12 text-center">
+              <div class="flex flex-col items-center justify-center text-slate-400">
+                <mat-icon class="!text-4xl !w-10 !h-10 mb-2 text-slate-300">admin_panel_settings</mat-icon>
+                <p class="text-sm font-medium text-slate-500">Chưa có vai trò nào</p>
+                <p class="text-xs mt-0.5">Hãy tạo vai trò mới ở biểu mẫu bên cạnh.</p>
+              </div>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -61,6 +61,11 @@
           </button>
         </div>
       </mat-menu>
+      <a *ngIf="currentUser?.role.includes('Admin')" href="" mat-button routerLink="/users">
+        <mat-icon>
+          groups
+        </mat-icon>
+      </a>
     </div>
     } @else {
       <!-- Khi chưa login -->
